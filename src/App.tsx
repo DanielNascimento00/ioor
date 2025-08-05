@@ -1,21 +1,27 @@
 import { useEffect, useState } from "react";
+import { AchievementsScreen } from "./components/AchievementsScreen";
 import { APICreator } from "./components/APICreator";
 import { ChallengeMode } from "./components/ChallengeMode";
 import { ChatScreen } from "./components/ChatScreen";
+import { DashboardScreen } from "./components/DashboardScreen";
 import { FundamentalsScreen } from "./components/FundamentalsScreen";
 import { GlossaryScreen } from "./components/GlossaryScreen";
 import { LabScreen } from "./components/LabScreen";
 import { LeaderboardScreen } from "./components/LeaderboardScreen";
 import { MissionScreen } from "./components/MissionScreen";
+import { NotificationSystem, useNotifications } from "./components/NotificationSystem";
 import { PerformanceHistory } from "./components/PerformanceHistory";
 import { ProgressMap } from "./components/ProgressMap";
 import { QuizScreen } from "./components/QuizScreen";
 import { SettingsScreen } from "./components/SettingsScreen";
+import { TutorialScreen } from "./components/TutorialScreen";
 import { UserProgress } from "./components/UserProgress";
 import { WelcomeScreen } from "./components/WelcomeScreen";
 
 type Screen =
   | "welcome"
+  | "tutorial"
+  | "dashboard"
   | "map"
   | "mission"
   | "chat"
@@ -28,7 +34,8 @@ type Screen =
   | "lab"
   | "settings"
   | "history"
-  | "fundamentals";
+  | "fundamentals"
+  | "achievements";
 
 export interface UserState {
   currentStep: number;
@@ -61,14 +68,27 @@ export interface AppSettings {
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>("welcome");
   const [currentMission, setCurrentMission] = useState<number>(0);
+  
+  // Notification system
+  const {
+    notifications,
+    dismissNotification,
+    clearAllNotifications,
+    notifyAchievement,
+    notifyLevelUp
+  } = useNotifications();
+  
   const [userState, setUserState] = useState<UserState>({
-    currentStep: 0,
-    completedSteps: [],
-    completedQuizzes: [],
-    quizScores: {},
-    score: 0,
-    level: 1,
-    achievements: [],
+    currentStep: 3,
+    completedSteps: [0, 1, 2],
+    completedQuizzes: [1, 2],
+    quizScores: {
+      1: { score: 4, totalQuestions: 5, attempts: 1 },
+      2: { score: 5, totalQuestions: 5, attempts: 1 }
+    },
+    score: 500,
+    level: 2,
+    achievements: ['first-steps', 'web-explorer', 'http-master'],
     challengesCompleted: 0,
     bestTimes: {},
     hintsUsed: 0,
@@ -150,7 +170,33 @@ export default function App() {
   };
 
   const updateUserProgress = (updates: Partial<UserState>) => {
-    setUserState((prev) => ({ ...prev, ...updates, lastActive: new Date() }));
+    setUserState(prev => {
+      const newState = { ...prev, ...updates, lastActive: new Date() };
+      
+      // Check for level up
+      if (updates.score !== undefined) {
+        const newLevel = Math.floor(newState.score / 200) + 1;
+        if (newLevel > prev.level) {
+          newState.level = newLevel;
+          notifyLevelUp(newLevel);
+        }
+      }
+      
+      // Check for new achievements
+      if (updates.achievements && updates.achievements.length > prev.achievements.length) {
+        const newAchievements = updates.achievements.filter(a => !prev.achievements.includes(a));
+        newAchievements.forEach(achievementId => {
+          // You can customize this based on your achievement data
+          notifyAchievement(
+            'Nova Conquista!',
+            `Você desbloqueou: ${achievementId}`,
+            { xp: 50 }
+          );
+        });
+      }
+      
+      return newState;
+    });
   };
 
   const updateSettings = (updates: Partial<AppSettings>) => {
@@ -180,6 +226,18 @@ export default function App() {
       case "welcome":
         return (
           <WelcomeScreen onNavigate={navigateToScreen} userState={userState} />
+        );
+      case "tutorial":
+        return (
+          <TutorialScreen 
+            userState={userState} 
+            onNavigate={navigateToScreen}
+            onUpdateProgress={updateUserProgress}
+          />
+        );
+      case "dashboard":
+        return (
+          <DashboardScreen userState={userState} onNavigate={navigateToScreen} />
         );
       case "map":
         return (
@@ -240,7 +298,13 @@ export default function App() {
       case "glossary":
         return <GlossaryScreen onNavigate={navigateToScreen} />;
       case "lab":
-        return <LabScreen />;
+        return (
+          <LabScreen
+            userState={userState}
+            onNavigate={navigateToScreen}
+            onUpdateProgress={updateUserProgress}
+          />
+        );
       case "fundamentals":
         return (
           <FundamentalsScreen
@@ -260,6 +324,13 @@ export default function App() {
         );
       case "history":
         return <PerformanceHistory onNavigate={navigateToScreen} />;
+      case "achievements":
+        return (
+          <AchievementsScreen
+            userState={userState}
+            onNavigate={navigateToScreen}
+          />
+        );
       default:
         return (
           <WelcomeScreen onNavigate={navigateToScreen} userState={userState} />
@@ -270,6 +341,11 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-indigo-900 transition-colors duration-300">
       {renderScreen()}
+      <NotificationSystem
+        notifications={notifications}
+        onDismiss={dismissNotification}
+        onClearAll={clearAllNotifications}
+      />
     </div>
   );
 }

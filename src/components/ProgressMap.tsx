@@ -2,14 +2,14 @@ import { motion } from 'motion/react';
 import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { Badge } from './ui/badge';
-import { ArrowDown, CheckCircle, Lock, Play, BookOpen, AlertCircle } from 'lucide-react';
+import { ArrowDown, CheckCircle, Lock, Play, BookOpen, AlertCircle, Trophy, FlaskConical } from 'lucide-react';
 import type { UserState } from '../App';
 import { MISSIONS } from './utils/constants';
 
 interface ProgressMapProps {
   userState: UserState;
   canUnlockMission: (missionIndex: number) => boolean;
-  onNavigate: (screen: 'mission' | 'quiz' | 'welcome' | 'progress', missionIndex?: number) => void;
+  onNavigate: (screen: 'mission' | 'quiz' | 'welcome' | 'progress' | 'lab' | 'achievements', missionIndex?: number) => void;
 }
 
 export function ProgressMap({ userState, canUnlockMission, onNavigate }: ProgressMapProps) {
@@ -85,6 +85,26 @@ export function ProgressMap({ userState, canUnlockMission, onNavigate }: Progres
             <Badge className="bg-gradient-to-r from-yellow-500 to-orange-500">
               {userState.score} XP
             </Badge>
+          </div>
+          
+          {/* Quick Access Buttons */}
+          <div className="flex justify-center gap-4 mb-8">
+            <Button
+              variant="outline"
+              onClick={() => onNavigate('lab')}
+              className="flex items-center gap-2"
+            >
+              <FlaskConical className="w-4 h-4" />
+              Laboratório
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => onNavigate('achievements')}
+              className="flex items-center gap-2"
+            >
+              <Trophy className="w-4 h-4" />
+              Conquistas
+            </Button>
           </div>
         </motion.div>
 
