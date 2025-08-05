@@ -18,6 +18,8 @@ import { Card } from "./ui/card";
 interface WelcomeScreenProps {
   onNavigate: (
     screen:
+      | "tutorial"
+      | "dashboard"
       | "map"
       | "progress"
       | "leaderboard"
@@ -33,6 +35,20 @@ interface WelcomeScreenProps {
 
 export function WelcomeScreen({ onNavigate, userState }: WelcomeScreenProps) {
   const features = [
+    {
+      icon: Book,
+      title: "Tutorial Interativo",
+      description: "Aprenda a usar todas as funcionalidades da plataforma",
+      action: () => onNavigate("tutorial"),
+      badge: !userState.achievements.includes('tutorial-complete') ? 'Recomendado' : 'Completo'
+    },
+    {
+      icon: Trophy,
+      title: "Dashboard",
+      description: "Visão geral do seu progresso e estatísticas",
+      action: () => onNavigate("dashboard"),
+      badge: userState.completedSteps.length > 0 ? 'Atualizado' : 'Novo!'
+    },
     {
       icon: Globe,
       title: "Missões Interativas",
