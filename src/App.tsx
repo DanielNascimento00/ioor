@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AchievementsScreen } from "./components/AchievementsScreen";
+import { DailyStreaks } from "./components/DailyStreaks";
 import { APICreator } from "./components/APICreator";
 import { ChallengeMode } from "./components/ChallengeMode";
 import { ChatScreen } from "./components/ChatScreen";
@@ -35,7 +36,9 @@ type Screen =
   | "settings"
   | "history"
   | "fundamentals"
-  | "achievements";
+  | "achievements"
+  | "badges"
+  | "daily-streaks";
 
 export interface UserState {
   currentStep: number;
@@ -329,6 +332,14 @@ export default function App() {
           <AchievementsScreen
             userState={userState}
             onNavigate={navigateToScreen}
+          />
+        );
+      case "daily-streaks":
+        return (
+          <DailyStreaks
+            userState={userState}
+            onNavigate={navigateToScreen}
+            onUpdateProgress={updateUserProgress}
           />
         );
       default:
