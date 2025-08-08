@@ -87,7 +87,7 @@ export function SettingsScreen({ settings, userState, onNavigate, onUpdateSettin
               <h1 className="text-3xl">Configurações</h1>
             </div>
             <p className="text-muted-foreground">
-              Personalize sua experiência no WebQuest Academy
+              Personalize sua experiência no IOOR
             </p>
           </div>
 
@@ -297,16 +297,16 @@ export function SettingsScreen({ settings, userState, onNavigate, onUpdateSettin
           className="mt-8"
         >
           <Card className="p-6 text-center">
-            <h3 className="mb-4">WebQuest Academy</h3>
+            <h3 className="mb-4">IOOR</h3>
             <p className="text-muted-foreground text-sm mb-4">
               Versão 1.0.0 - Uma plataforma educativa gamificada para aprender desenvolvimento web
             </p>
             <div className="flex justify-center gap-4 text-sm text-muted-foreground">
               <span>Desenvolvido com React</span>
               <span>•</span>
-              <span>Powered by Tailwind CSS</span>
+              <span>Tailwind CSS</span>
               <span>•</span>
-              <span>Motion animations</span>
+              <span>Motion Animations</span>
             </div>
           </Card>
         </motion.div>
