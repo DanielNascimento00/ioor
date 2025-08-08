@@ -201,4 +201,4 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
   <p>⭐ Se este projeto te ajudou, considere dar uma estrela!</p>
 </div>
 
-Este projeto serviu de base para as conquistas do
+Este projeto serviu de base para as conquistas do github
