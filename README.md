@@ -200,3 +200,5 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
   <p>Feito com ❤️ para democratizar o conhecimento sobre a web</p>
   <p>⭐ Se este projeto te ajudou, considere dar uma estrela!</p>
 </div>
+
+Este projeto serviu de base para as conquistas do
