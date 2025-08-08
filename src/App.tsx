@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AchievementsScreen } from "./components/AchievementsScreen";
+import { BadgeSystem } from "./components/BadgeSystem";
 import { APICreator } from "./components/APICreator";
 import { ChallengeMode } from "./components/ChallengeMode";
 import { ChatScreen } from "./components/ChatScreen";
@@ -19,6 +20,7 @@ import { UserProgress } from "./components/UserProgress";
 import { WelcomeScreen } from "./components/WelcomeScreen";
 
 type Screen =
+  | "landing"
   | "welcome"
   | "tutorial"
   | "dashboard"
@@ -35,7 +37,8 @@ type Screen =
   | "settings"
   | "history"
   | "fundamentals"
-  | "achievements";
+  | "achievements"
+  | "badges";
 
 export interface UserState {
   currentStep: number;
@@ -327,6 +330,13 @@ export default function App() {
       case "achievements":
         return (
           <AchievementsScreen
+            userState={userState}
+            onNavigate={navigateToScreen}
+          />
+        );
+      case "badges":
+        return (
+          <BadgeSystem
             userState={userState}
             onNavigate={navigateToScreen}
           />
