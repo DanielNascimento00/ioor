@@ -139,7 +139,7 @@ export function DailyStreaks({ userState, onNavigate, onUpdateProgress }: DailyS
   const [longestStreak, setLongestStreak] = useState(0);
   const [dailyActivities, setDailyActivities] = useState<DailyActivity[]>([]);
   const [todayCompleted, setTodayCompleted] = useState(false);
-
+ 
   // Simular dados baseados no estado do usuário
   useEffect(() => {
     // Calcular streak baseado na atividade do usuário
@@ -162,7 +162,7 @@ export function DailyStreaks({ userState, onNavigate, onUpdateProgress }: DailyS
       activities.push({
         date: dateStr,
         completed,
-        activities: completed ? ['Quiz completado', 'Missão realizada'] : [],
+        activities: completed ? ['Quizz completado', 'Missão realizada'] : [],
         xpEarned: completed ? Math.floor(Math.random() * 50) + 25 : 0
       });
     }
